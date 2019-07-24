@@ -1,13 +1,12 @@
 @extends('master')
 @section('content')
-  <div class="container">
     <div class="row">
       <div class="col-md-12">
         <h1>Main View</h1>
       </div>
       <div class="col-md-2"></div>
       <div class="col-md-8">
-        <form class="" action="" method="get">
+        <form class="" action="{{route('categories.show')}}" method="post">
               {{csrf_field()}}
               <div class="">
                 <label for="pick_up_location">Pick up location: </label>
@@ -39,5 +38,4 @@
       </div>
       <div class="col-md-2"></div>
     </div>
-  </div>
 @endsection()

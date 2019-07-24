@@ -5,6 +5,7 @@
     <title></title>
     {{-- <link rel="stylesheet" href="{{public_path('css/style.css')}}"> --}}
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/css/style.css') }}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style media="screen">
     html, body {
@@ -25,6 +26,8 @@
     </style>
   </head>
   <body>
-    @yield('content')
+    <div class="container">
+          @yield('content')
+    </div>
   </body>
 </html>
