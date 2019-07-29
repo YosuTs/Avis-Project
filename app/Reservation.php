@@ -25,4 +25,9 @@ class Reservation extends Model
   'canceled_at',
   'refound_percentage'
 ];
+
+public function additionalServices()
+{
+  return $this->belongsToMany('\App\AdditionalService', 'reservation_service', 'reservation_id', 'service_id');
+}
 }

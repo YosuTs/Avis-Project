@@ -15,7 +15,10 @@
 //     return view('reservation.index');
 // });
 
-Route::get('/', 'ReservationController@index');
+Route::get('/', [
+  'uses' => 'ReservationController@index',
+  'as' => 'reservation.index'
+]);
 
 Route::post('/categories', [
   'uses' => 'CategoryController@showAvailableCategories',
@@ -35,4 +38,19 @@ Route::post('/reservation', [
 Route::post('/reservation/pay', [
   'uses' => 'ReservationController@show_pay',
   'as' => 'pay.show'
+]);
+
+Route::post('/reservation/detail/', [
+  'uses' => 'ReservationController@show_reservation_details_post',
+  'as' => 'reservation.detail'
+]);
+
+Route::get('/reservation/search', [
+  'uses' => 'ReservationController@search_reservation',
+  'as' => 'reservation.search'
+]);
+
+Route::post('/reservation/conekta', [
+  'uses' => 'ReservationController@choose_payment',
+  'as' => 'reservation.choose_payment'
 ]);
