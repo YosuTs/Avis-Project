@@ -1,8 +1,10 @@
 @extends('master')
 @section('content')
+  <div class="row display-tr">
+    <h3>Additional services</h3>
+  </div>
   <form action="{{route('personal_information.show')}}" method="post">
     {{csrf_field()}}
-    <h4>Additional Services:</h4>
       @foreach ($services as $service)
         <div class="form-check">
           <input class="form-check-input" type="checkbox" name="extras[]" value="{{$service->id}}" id="{{$service->id}}">

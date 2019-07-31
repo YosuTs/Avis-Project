@@ -23,7 +23,8 @@ class Reservation extends Model
   'discount',
   'canceled',
   'canceled_at',
-  'refound_percentage'
+  'refound_percentage',
+  'order_id'
 ];
 
 public function additionalServices()

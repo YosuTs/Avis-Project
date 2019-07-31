@@ -11,6 +11,11 @@ class Category extends Model
     return $this->hasMany('\App\Car');
   }
 
+  public function locations()
+  {
+    return $this->belongsToMany('\App\Location', 'category_location', 'category_id', 'location_id');
+  }
+
   protected $fillable = [
     'name', 'capacity', 'cost'
   ];

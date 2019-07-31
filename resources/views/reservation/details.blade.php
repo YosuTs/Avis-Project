@@ -1,5 +1,10 @@
 @extends('master')
 @section('content')
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Reservation details</h3>
+    </div>
+  </div>
     <div class="row">
       @if ($reservation!=null)
         <div class="col-md-12">
@@ -17,10 +22,11 @@
           <form class="" action="{{route('reservation.index')}}" method="get">
             <button class="btn" type="submit">Return home</button>
           </form>
+          <a class="btn" href="{{route('reservation.cancel', $reservation->id)}}">Cancel reservation</a>
         </div>
       @else
         <div class="col-md-12">
-          <h1>Couldn't find reservation</h1>
+          <p>Couldn't find reservation</p>
           <div class="col-md-12">
             <form class="" action="{{route('reservation.index')}}" method="get">
               <button class="btn" type="submit">Return home</button>
@@ -28,6 +34,5 @@
           </div>
         </div>
       @endif
-
     </div>
 @endsection()

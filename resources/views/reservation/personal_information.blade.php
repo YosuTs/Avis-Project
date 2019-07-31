@@ -1,5 +1,8 @@
 @extends('master')
 @section('content')
+  <div class="row display-tr">
+    <h3>Personal information</h3>
+  </div>
   <form action="{{route('pay.show')}}" method="post">
     {{csrf_field()}}
     <div class="row">

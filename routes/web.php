@@ -54,3 +54,33 @@ Route::post('/reservation/conekta', [
   'uses' => 'ReservationController@choose_payment',
   'as' => 'reservation.choose_payment'
 ]);
+
+Route::post('/pay', [
+  'uses' => 'PayController@pay',
+  'as' => 'pay.pay'
+]);
+
+Route::get('/category/categories', [
+  'uses' => 'CategoryController@showCategories',
+  'as' => 'category.categories'
+]);
+
+Route::get('/category/returnAdd', [
+  'uses' => 'CategoryController@returnAdd',
+  'as' => 'category.returnAdd'
+]);
+
+Route::post('/category/add', [
+  'uses' => 'CategoryController@add',
+  'as' => 'category.add'
+]);
+
+Route::get('/reservation/cancel/{id}', [
+  'uses' => 'ReservationController@cancel_reservation',
+  'as' => 'reservation.cancel'
+]);
+
+Route::get('/category/delete/{id}', [
+  'uses' => 'CategoryController@delete',
+  'as' => 'category.delete'
+]);

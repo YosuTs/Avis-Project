@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+require_once(app_path()."/conekta-php-master/lib/Conekta.php");
+
 use Illuminate\Http\Request;
 use App\Location;
 use App\Category;
 use App\AdditionalService;
 use App\Reservation;
+use Carbon\Carbon;
+use App\PaymentConekta;
 
 class ReservationController extends Controller
 {
@@ -27,7 +31,7 @@ class ReservationController extends Controller
       $pick_up_date = date_create($request->pick_up_date);
       $drop_off_date = date_create($request->drop_off_date);
       $interval = date_diff($pick_up_date, $drop_off_date);
-      $days = $interval->format("%a");
+      $days = $interval->format("%a")+1;
 
       $category = Category::find($request->category);
 
@@ -62,23 +66,27 @@ class ReservationController extends Controller
           'discount' => 0,
           'canceled' => false,
           'canceled_at'=> null,
-          'refound_percentage' => null
+          'refound_percentage' => null,
+          'order_id' =>null
         ));
         if($request->extras != null){
           $reservation->additionalServices()->attach($request->extras);
         }
+        $this->send_confirmation_email($reservation->id, $reservation->name, $reservation->email);
         return $this->show_reservation_details($reservation->id, $reservation->lastname);
         //return view('reservation.details')->withReservation($reservation);
       }
       else{
-        return view('reservation.pay')->withRequest($request);
+        return view('reservation.pay')->withRequest($request)->withTotal($total_price);
       }
 
     }
 
     public function show_reservation_details($id, $lastname)
     {
-      $reservation = Reservation::find($id);
+      //$reservation = Reservation::find($id);
+      $reservation = Reservation::where('id', $id)->where('lastname', $lastname)->where('canceled', 0)->first();
+
       $pick_up_location = Location::find($reservation->pick_up_location_id);
       $drop_off_location = Location::find($reservation->drop_off_location_id);
 
@@ -88,13 +96,17 @@ class ReservationController extends Controller
     public function show_reservation_details_post(Request $request)
     {
       $id = $request->id;
-      $reservation = Reservation::find($id);
+      $reservation = Reservation::where('id', $id)->where('lastname', $request->lastname)->where('canceled', 0)->first();
+      //$reservation = Reservation::find($id);
+
       if($reservation != null){
         $pick_up_location = Location::find($reservation->pick_up_location_id);
         $drop_off_location = Location::find($reservation->drop_off_location_id);
       }
-      $pick_up_location = null;
-      $drop_off_location = null;
+      else{
+        $pick_up_location = null;
+        $drop_off_location = null;
+      }
       return view('reservation.details')->withReservation($reservation)->withPulocation($pick_up_location)->withDolocation($drop_off_location);
     }
 
@@ -108,6 +120,57 @@ class ReservationController extends Controller
       if($request->button=="conekta"){
         return view('reservation.conekta')->withRequest($request);
       }
+    }
+
+    public function send_confirmation_email($id, $name, $email)
+    {
+      $msg = "Hello ".$name."\nYour reservation id is: ".$id."\n";
+      $msg = wordwrap($msg, 70);
+      mail($email, "Avis reservation id", $msg);
+    }
+
+    public function cancel_reservation($id)
+    {
+      $reservation = Reservation::find($id);
+      $fix_amount = 300;
+
+      $created_at = $reservation->created_at;
+      $pick_up_date = Carbon::createFromFormat('Y-m-d H:s:i', $reservation->pick_up_date);
+      $now = Carbon::now();
+
+      $interval = $created_at->diffInHours($now);
+      $pick_up_interval = $now->diffInHours($pick_up_date);
+
+      if($interval < 24){
+        $refund = $reservation->total_cost-$fix_amount;
+        $refund_percentage = "100%";
+      }
+      else{
+        if($pick_up_interval > 48){
+          $refund = ($reservation->total_cost*0.50)-$fix_amount;
+          $refund_percentage = "50%";
+        }
+        if($pick_up_interval < 48){
+          $refund = ($reservation->total_cost*0.25)-$fix_amount;
+          $refund_percentage = "25%";
+        }
+      }
+
+      $order = new PaymentConekta(null, null, null, null, null, null);
+
+      if($order->refund($reservation->order_id, $refund)){
+        $reservation->update(array(
+          'canceled' => true,
+          'canceled_at' => $now,
+          'refound_percentage' => $refund_percentage
+        ));
+        return view('reservation.cancelation_result')->withCanceled(true);
+      }
+      else{
+        //echo($order->error);
+        return view('reservation.cancelation_result')->withCanceled(false);
+      }
+
     }
 
 }

@@ -58,7 +58,7 @@
       <div class="topnav">
         <a href="{{route('reservation.index')}}">Home</a>
         <a href="{{route('reservation.search')}}">Search reservation</a>
-        <a href="#contact">Contact</a>
+        <a href="{{route('category.categories')}}">Categories</a>
         <a href="#about">About</a>
       </div>
     </header>
