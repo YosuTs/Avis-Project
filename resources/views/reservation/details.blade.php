@@ -19,17 +19,15 @@
           </ul>
         </div>
         <div class="col-md-12">
-          <form class="" action="{{route('reservation.index')}}" method="get">
-            <button class="btn" type="submit">Return home</button>
-          </form>
-          <a class="btn" href="{{route('reservation.cancel', $reservation->id)}}">Cancel reservation</a>
+          <a class="btn btn-success" href="{{route('reservation.index')}}">Return home</a>
+          <a class="btn btn-danger" href="{{route('reservation.cancel', $reservation->id)}}">Cancel reservation</a>
         </div>
       @else
         <div class="col-md-12">
           <p>Couldn't find reservation</p>
           <div class="col-md-12">
             <form class="" action="{{route('reservation.index')}}" method="get">
-              <button class="btn" type="submit">Return home</button>
+              <button class="btn btn-success" type="submit">Return home</button>
             </form>
           </div>
         </div>

@@ -21,13 +21,15 @@
               <td>{{$category->name}}</td>
               <td>{{$category->capacity}}</td>
               <td>${{$category->cost}}</td>
-              <td><a class="btn" href="{{route('category.delete', $category->id)}}">Delete</a></td>
+              <td><a class="btn btn-danger" href="{{route('category.delete', $category->id)}}">Delete</a></td>
             </tr>
           @endforeach
         </tbody>
       </table>
   </div>
   <div class="row">
-    <a class="btn" href="{{route('category.returnAdd')}}">Add category</a>
+    <div class="col-md-12">
+      <a class="btn" href="{{route('category.returnAdd')}}">Add category</a>
+    </div>
   </div>
 @endsection()

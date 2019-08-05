@@ -143,11 +143,12 @@ class PaymentConekta extends Model
     {
       \Conekta\Conekta::setApiKey($this->ApiKey);
       \Conekta\Conekta::setApiVersion($this->ApiVersion);
+      $amount = intval($refund)*100;
       try {
         $this->order = \Conekta\Order::find($id);
         $this->order->refund(array(
           'reason' => 'requested_by_client',
-          'amount' => $refund*100
+          'amount' => $amount
         ));
       }
       catch(\Conekta\ProcessingError $error){

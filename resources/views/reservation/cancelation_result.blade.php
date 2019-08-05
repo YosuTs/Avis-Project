@@ -12,7 +12,7 @@
         </div>
       @else
         <div class="col-md-12">
-          <p>There was a problem canceling your reservation, please try again later</p>
+          <p>{{$error}}</p>
         </div>
       @endif
       <div class="col-md-12">

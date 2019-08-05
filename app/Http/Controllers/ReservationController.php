@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 require_once(app_path()."/conekta-php-master/lib/Conekta.php");
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Location;
 use App\Category;
 use App\AdditionalService;
@@ -28,10 +29,43 @@ class ReservationController extends Controller
 
     public function show_pay(Request $request)
     {
+      // $request->validate([
+      //   "pick_up_location_id" => 'required',
+      //   "drop_off_location_id" => 'required',
+      //   "pick_up_date" => 'required|date|after:today',
+      //   "drop_off_date" => 'required|date|after:pick_up_date',
+      //   'category' => 'required',
+      //   "extras" => 'required',
+      //   'name' => 'required'
+      //   'lastname' => 'required',
+      //   'address' => 'required',
+      //   'email' => 'required|email',
+      //   'cellphone' => 'required'
+      // ]);
+
+      $validator = Validator::make($request->all(), [
+        "pick_up_location_id" => 'required',
+        "drop_off_location_id" => 'required',
+        "pick_up_date" => 'required|date|after:today',
+        "drop_off_date" => 'required|date|after:pick_up_date',
+        'category' => 'required',
+        'name' => 'required',
+        'lastname' => 'required',
+        'address' => 'required',
+        'email' => 'required|email',
+        'cellphone' => 'required|numeric'
+
+      ]);
+      if($validator->fails())
+      {
+          //return redirect()->back()->withErrors($validator)->withInput();
+          return view('reservation.personal_information')->withErrors($validator)->withRequest($request);
+      }
+
       $pick_up_date = date_create($request->pick_up_date);
       $drop_off_date = date_create($request->drop_off_date);
       $interval = date_diff($pick_up_date, $drop_off_date);
-      $days = $interval->format("%a")+1;
+      $days = $interval->format("%a");
 
       $category = Category::find($request->category);
 
@@ -77,7 +111,7 @@ class ReservationController extends Controller
         //return view('reservation.details')->withReservation($reservation);
       }
       else{
-        return view('reservation.pay')->withRequest($request)->withTotal($total_price);
+        return view('reservation.conekta')->withRequest($request)->withTotal($total_price);
       }
 
     }
@@ -168,7 +202,7 @@ class ReservationController extends Controller
       }
       else{
         //echo($order->error);
-        return view('reservation.cancelation_result')->withCanceled(false);
+        return view('reservation.cancelation_result')->withCanceled(false)->withError($order->error);
       }
 
     }

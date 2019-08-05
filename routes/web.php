@@ -35,6 +35,12 @@ Route::post('/reservation', [
   'as' => 'personal_information.show'
 ]);
 
+
+Route::get('/reservation', [
+  'uses' => 'ReservationController@personal_information',
+  'as' => 'personal_information.show'
+]);
+
 Route::post('/reservation/pay', [
   'uses' => 'ReservationController@show_pay',
   'as' => 'pay.show'

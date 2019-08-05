@@ -10,6 +10,13 @@ class CategoryController extends Controller
 {
   public function showAvailableCategories(Request $request)
   {
+    $request->validate([
+      "pick_up_location_id" => 'required',
+      "drop_off_location_id" => 'required',
+      "pick_up_date" => 'required|date|after:today',
+      "drop_off_date" => 'required|date|after:pick_up_date'
+    ]);
+
     $pickupLocation = Location::find($request->pick_up_location_id);
 
     $categories = $pickupLocation->categories;

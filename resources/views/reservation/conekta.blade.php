@@ -5,7 +5,7 @@
   </div>
   <form id="card-form" method="post" action="{{route('pay.pay')}}">
     {{csrf_field()}}
-    <input type="text" name="conektaTokenId" id="conektaTokenId" value="">
+    <input type="hidden" name="conektaTokenId" id="conektaTokenId" value="">
     <div class="row">
       <div class="col-md-6">
         <label for="name">Name</label>
@@ -20,13 +20,13 @@
     <div class="row">
       <div class="col-md-6">
         <label for="cvc">CVC</label>
-        <input class="form-control" data-conekta="card[cvc]" type="text" value="123" maxlength="4" id="cvc">
+        <input class="form-control" data-conekta="card[cvc]" type="text" name="cvc" value="123" maxlength="4" id="cvc">
       </div>
       <div class="col-md-6">
         <label>Expiration date: (MM/YY)</label>
         <br>
-        <input style="width:50px; display:inline-block;" class="form-control" type="text" data-conekta="card[exp_month]" value="09" maxlength="2">
-        <input style="width:50px; display:inline-block;" class="form-control" type="text" data-conekta="card[exp_year]" value="22" maxlength="2">
+        <input style="width:50px; display:inline-block;" name="exp_month" class="form-control" type="text" data-conekta="card[exp_month]" value="09" maxlength="2">
+        <input style="width:50px; display:inline-block;" name="exp_year" class="form-control" type="text" data-conekta="card[exp_year]" value="22" maxlength="2">
       </div>
     </div>
     <div class="row">
@@ -37,9 +37,9 @@
       <div class="col-md-6">
         <br>
         <br>
-        <h5>Total: ${{$request->total}}</h5>
-        <input type="hidden" name="total" value="{{$request->total}}">
-        <input type="hidden" name="description" value="{{$request->name}} {{$request->lastname}} - ${{$request->total}}">
+        <h5>Total: ${{$total}}</h5>
+        <input type="hidden" name="total" value="{{$total}}">
+        <input type="hidden" name="description" value="{{$request->name}} {{$request->lastname}} - ${{$total}}">
         <input type="hidden" name="name" value="{{$request->name}}">
         <input type="hidden" name="lastname" value="{{$request->lastname}}">
         <input type="hidden" name="pick_up_date" value="{{$request->pick_up_date}}">
@@ -63,7 +63,7 @@
     </div>
   </form>
 
-  <ol>
+  {{-- <ol>
     <li>pick_up_date: {{$request->pick_up_date}}</li>
     <li>pick_up_location_id: {{$request->pick_up_location_id}}</li>
     <li>drop_off_date: {{$request->drop_off_date}}</li>
@@ -79,8 +79,8 @@
     <li>address: {{$request->address}}</li>
     <li>email: {{$request->email}}</li>
     <li>cellphone: {{$request->cellphone}}</li>
-    <li>total: {{$request->total}}</li>
-  </ol>
+    <li>$total: {{$total}}</li>
+  </ol> --}}
 
   <script type="text/javascript">
     Conekta.setPublicKey("key_DdmfjuvyciLNGhsCz9UQkew");

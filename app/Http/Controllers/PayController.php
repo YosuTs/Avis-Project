@@ -7,6 +7,7 @@ use App\PaymentConekta;
 use App\ConektaPayment;
 use App\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Location;
 
 
@@ -14,9 +15,33 @@ class PayController extends Controller
 {
     public function pay(Request $request)
     {
+      $validator = Validator::make($request->all(), [
+        "pick_up_location_id" => 'required',
+        "drop_off_location_id" => 'required',
+        "pick_up_date" => 'required|date|after:today',
+        "drop_off_date" => 'required|date|after:pick_up_date',
+        'category' => 'required',
+        'name' => 'required',
+        'lastname' => 'required',
+        'address' => 'required',
+        'email' => 'required|email',
+        'cellphone' => 'required|numeric',
+        'name_conekta' => 'required',
+        'card' => 'required|numeric',
+        'cvc' => 'required|numeric',
+        'exp_month' => 'required|numeric',
+        'exp_year' => 'required|numeric'
+      ]);
+
+      if($validator->fails())
+      {
+          //return redirect()->back()->withErrors($validator)->withInput();
+          return view('reservation.conekta')->withErrors($validator)->withRequest($request);
+      }
+
       $new_total = $request->total*0.90;
-      //echo "Email: ".$request->email;
-      $oPayment = new PaymentConekta($request->conektaTokenId, $request->card, $request->name_conekta, $request->description, $new_total, $request->email);
+      //echo "Total: ".$new_total;
+      $oPayment = new PaymentConekta($request->conektaTokenId, $request->card, $request->name_conekta, $request->description, intval($new_total), $request->email);
 
       if($oPayment->pay()){
         $reservation = Reservation::create(array(

@@ -8,7 +8,7 @@
     <div class="row">
       <div class="col-md-6">
         <label for="name">Name: </label>
-        <input class="form-control" type="text" name="name" id="name"/>
+        <input class="form-control" type="text" name="name" value="" id="name"/>
       </div>
       <div class="col-md-6">
         <label for="lastname">Lastname: </label>
@@ -34,8 +34,8 @@
       </div>
       <div class="col-md-6">
         <br>
-        <button class="btn" type="submit" name="button" value="pay">See payment options</button>
-        <button class="btn" type="submit" name="button" value="reserve">Reserve</button>
+        <button class="btn" formmethod="post" type="submit" name="button" value="pay">Pay</button>
+        <button class="btn" formmethod="post" type="submit" name="button" value="reserve">Reserve</button>
       </div>
     </div>
 
@@ -50,7 +50,7 @@
       @endforeach
     @endif
   </form>
-  <ol>
+  {{-- <ol>
     <li>pick_up_date: {{$request->pick_up_date}}</li>
     <li>pick_up_location_id: {{$request->pick_up_location_id}}</li>
     <li>drop_off_date: {{$request->drop_off_date}}</li>
@@ -60,6 +60,6 @@
       @foreach ($request->extras as $extra)
         <li>extra: {{$extra}}</li>
       @endforeach
-    @endif
+    @endif --}}
   </ol>
 @endsection()
